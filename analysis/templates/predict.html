@@ -1,0 +1,13 @@
+<html>
+<head>
+    <title>Video Title Prediction</title>
+</head>
+<body>
+    <h1>Predict Engagement for Video Title</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Predict Engagement</button>
+    </form>
+</body>
+</html>
