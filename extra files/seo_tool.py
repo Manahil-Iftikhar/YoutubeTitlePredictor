@@ -26,7 +26,8 @@ def search_videos(query, max_results=10):
         type='video',
         maxResults=max_results
     ).execute()
-    return [item['id']['videoId'] for item in search_response['items']]
+    video_ids = [item['id']['videoId'] for item in search_response['items']]
+    return video_ids 
 
 def get_video_details(video_ids):
     try:

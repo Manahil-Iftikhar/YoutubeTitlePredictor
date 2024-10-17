@@ -1,0 +1,10 @@
+__pycache__
+__init__.py
+.idea
+.DS_Store
+.env
+.vscode
+venv
+db.sqlite
+.ipynb_checkpoints
+trending_videos_metadata.csv
