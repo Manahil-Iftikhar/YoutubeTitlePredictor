@@ -1,35 +1,27 @@
-from django.shortcuts import render
-
-import pickle
+import joblib  # Import joblib to load the model
 from django.shortcuts import render
 from .forms import VideoTitleForm
+# from .seo_tool import *
+from .youtube_seo_tool import *
 
-# Load your trained machine learning model (replace 'model.pkl' with your model's file)
-# with open('model.pkl', 'rb') as f:
-#     model = pickle.load(f)
+# Load the model at the top of your views.py file
+# model = joblib.load('path/to/save/model.pkl')  # Adjust the path as necessary
 
-def predict_engagement(request):
-    if request.method == 'POST':
-        form = VideoTitleForm(request.POST)
-        if form.is_valid():
-            video_title = form.cleaned_data['video_title']
-            competition = form.cleaned_data['competition']
-            search_volume = form.cleaned_data['search_volume']
+def predict_engagement_view(request):
+    form = VideoTitleForm(request.POST or None)  # Initialize form with POST data if available
 
-            # Feature extraction (title length in this case)
-            title_length = len(video_title)
-            features = [[title_length, competition, search_volume]]
+    if request.method == 'POST' and form.is_valid():
+        title = form.cleaned_data['video_title']
+        competition = form.cleaned_data['competition']  # Ensure this field exists in the form
+        search_volume = form.cleaned_data['search_volume']  # Ensure this field exists in the form
 
-            # Predict engagement
-            # predicted_engagement = model.predict(features)[0]
+        result = search_videos(query=title)
 
-            return render(request, 'result.html', {
-                'form': form,
-                # 'prediction': predicted_engagement,
-                'video_title': video_title
-            })
-    else:
-        form = VideoTitleForm()
-    
+        return render(request, 'results.html', {
+            'form': form,
+            # 'prediction': predicted_engagement_score,
+            'video_data' : result
+            # 'video_data': video_data_df.to_dict(orient='records')  # Convert DataFrame to a list of dictionaries for rendering
+        })
+
     return render(request, 'predict.html', {'form': form})
-

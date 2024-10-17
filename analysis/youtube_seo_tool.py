@@ -18,13 +18,7 @@ BASE_URL = "https://www.googleapis.com/youtube/v3/videos"
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
 def search_videos(query, max_results=10):
-    """
-    Searches YouTube for videos matching the given query.
-    
-    :param query: Search query for YouTube.
-    :param max_results: Number of results to return.
-    :return: List of videos with their details.
-    """
+
     search_response = youtube.search().list(
         q=query,
         part='snippet',
@@ -36,12 +30,7 @@ def search_videos(query, max_results=10):
     return get_video_details(video_ids)
 
 def get_video_details(video_ids):
-    """
-    Retrieves details for a list of videos using their video IDs.
-    
-    :param video_ids: List of video IDs.
-    :return: Pandas DataFrame with video details.
-    """
+
     video_response = youtube.videos().list(
         part='snippet,statistics',
         id=','.join(video_ids)
@@ -71,7 +60,7 @@ if __name__ == "__main__":
     print(video_data_df)
 
     # Optionally, save the data to a CSV file
-    video_data_df.to_csv('youtube_video_data.csv', index=False)
+    video_data_df.to_csv('./youtube_video_data.csv', index=False)
 # Categories (example: 10 for Music, 20 for Gaming, 25 for News, 17 for Sports)
 categories = {
     "Music": 10,
@@ -115,12 +104,12 @@ for category, category_id in categories.items():
 df = pd.DataFrame(video_data)
 
 # Save to CSV
-df.to_csv('trending_videos_metadata.csv', index=False)
+df.to_csv('./trending_videos_metadata.csv', index=False)
 
 print("Data collected and saved to trending_videos_metadata.csv")
 
 # Load the dataset from the CSV file
-df = pd.read_csv('youtube_video_metadata.csv')
+df = pd.read_csv('./trending_videos_metadata.csv')
 
 # 1. Remove duplicates
 df.drop_duplicates(inplace=True)
@@ -171,7 +160,7 @@ print("Data cleaning is complete. Cleaned data saved to 'youtube_video_metadata_
 # df = pd.read_csv('youtube_video_metadata_cleaned.csv')
 
 # Extract titles, descriptions, and tags for keyword analysis
-video_text = df['title'] + ' ' + df['description'] + ' ' + df['tags']
+video_text = df['title'] + ' ' + df['description']
 
 # Convert text to lowercase and remove missing values
 video_text = video_text.fillna('').str.lower()
@@ -180,8 +169,10 @@ video_text = video_text.fillna('').str.lower()
 nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
 
-# Initialize CountVectorizer to extract keywords (unigrams and bigrams)
-vectorizer = CountVectorizer(stop_words=stop_words, ngram_range=(1, 2))
+# Initialize CountVectorizer with the correct stop_words parameter
+vectorizer = CountVectorizer(stop_words='english')  # Use 'english' or a list of stop words
+
+# Assuming video_text is defined and contains the text data
 X = vectorizer.fit_transform(video_text)
 
 # Get feature names (keywords)
@@ -200,7 +191,15 @@ print(keyword_df.head(10))
 
 
 # Load your cleaned YouTube data
-df = pd.read_csv('youtube_video_metadata_cleaned.csv')
+df = pd.read_csv('./youtube_video_metadata_cleaned.csv')
+
+# Check if 'search_volume' column exists
+if 'search_volume' not in df.columns:
+    print("Warning: 'search_volume' column not found. Initializing with zeros.")
+    df['search_volume'] = 0  # Initialize with zeros or any default value
+
+# Fill missing values in the 'search_volume' column
+df['search_volume'] = df['search_volume'].fillna(0)  # Replace with real search volume data
 
 # Feature Engineering: Calculate engagement score (for example: views + likes + comments)
 df['engagement_score'] = df['views'] + df['likes'] + df['comments']
