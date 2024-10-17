@@ -5,8 +5,8 @@ from django.shortcuts import render
 from .forms import VideoTitleForm
 
 # Load your trained machine learning model (replace 'model.pkl' with your model's file)
-with open('model.pkl', 'rb') as f:
-    model = pickle.load(f)
+# with open('model.pkl', 'rb') as f:
+#     model = pickle.load(f)
 
 def predict_engagement(request):
     if request.method == 'POST':
@@ -21,15 +21,15 @@ def predict_engagement(request):
             features = [[title_length, competition, search_volume]]
 
             # Predict engagement
-            predicted_engagement = model.predict(features)[0]
+            # predicted_engagement = model.predict(features)[0]
 
-            return render(request, 'template/result.html', {
+            return render(request, 'result.html', {
                 'form': form,
-                'prediction': predicted_engagement,
+                # 'prediction': predicted_engagement,
                 'video_title': video_title
             })
     else:
         form = VideoTitleForm()
     
-    return render(request, 'template/predict.html', {'form': form})
+    return render(request, 'predict.html', {'form': form})
 
