@@ -1,6 +1,4 @@
 from django.urls import path
-from . import views
+from .views import predict_engagement_view
 
-urlpatterns = [
-    path('', views.predict_engagement, name='predict'),
-]
+urlpatterns = [path("", predict_engagement_view, name="predict")]

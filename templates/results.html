@@ -1,13 +1,3 @@
-<html>
-<head>
-    <title>Prediction Result</title>
-</head>
-<body></br></br></br>
-    <center>
-    <h1>Prediction Result</h1>
-    <p>Video Title: {{ video_title }}</p>
-    <p>Predicted Engagement Score: {{ prediction }}</p>
-    <a href="{% url 'predict' %}">Make another prediction</a>
-    </center>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Search results · YouTube Metadata Explorer{% endblock %}
+{% block content %}<h2>Results for “{{ query }}”</h2><p><a href="{% url 'predict' %}">Search another topic</a></p>{% for video in videos %}<article><h2><a href="{{ video.url }}" target="_blank" rel="noopener noreferrer">{{ video.title }}</a></h2><p class="muted">{{ video.channel }}</p><p class="description">{{ video.description }}</p></article>{% empty %}<section><p>No matching videos were found. Try a different topic.</p></section>{% endfor %}{% endblock %}

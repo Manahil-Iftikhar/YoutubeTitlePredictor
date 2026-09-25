@@ -1,27 +1,18 @@
-import joblib  # Import joblib to load the model
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 from .forms import VideoTitleForm
-# from .seo_tool import *
-from .youtube_seo_tool import *
+from .services import VideoSearchError, search_videos
 
-# Load the model at the top of your views.py file
-# model = joblib.load('path/to/save/model.pkl')  # Adjust the path as necessary
 
+@require_http_methods(["GET", "POST"])
 def predict_engagement_view(request):
-    form = VideoTitleForm(request.POST or None)  # Initialize form with POST data if available
-
-    if request.method == 'POST' and form.is_valid():
-        title = form.cleaned_data['video_title']
-        competition = form.cleaned_data['competition']  # Ensure this field exists in the form
-        search_volume = form.cleaned_data['search_volume']  # Ensure this field exists in the form
-
-        result = search_videos(query=title)
-
-        return render(request, 'results.html', {
-            'form': form,
-            # 'prediction': predicted_engagement_score,
-            'video_data' : result
-            # 'video_data': video_data_df.to_dict(orient='records')  # Convert DataFrame to a list of dictionaries for rendering
-        })
-
-    return render(request, 'predict.html', {'form': form})
+    form = VideoTitleForm(request.POST if request.method == "POST" else None)
+    if request.method == "POST" and form.is_valid():
+        query = form.cleaned_data["video_title"]
+        try:
+            videos = search_videos(query)
+        except VideoSearchError as exc:
+            form.add_error(None, str(exc))
+        else:
+            return render(request, "results.html", {"query": query, "videos": videos})
+    return render(request, "predict.html", {"form": form})

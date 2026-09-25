@@ -1,6 +1,8 @@
 from django import forms
 
+
 class VideoTitleForm(forms.Form):
-    video_title = forms.CharField(label='Video Title', max_length=255)
-    competition = forms.IntegerField(label='Competition')
-    search_volume = forms.IntegerField(label='Search Volume')
+    video_title = forms.CharField(
+        label="Topic or video title", max_length=255, strip=True,
+        widget=forms.TextInput(attrs={"placeholder": "e.g. Python data analysis", "autofocus": True}),
+    )

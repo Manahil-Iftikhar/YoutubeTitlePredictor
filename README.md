@@ -4,7 +4,7 @@
 
 This project brings together YouTube Data API collection, pandas data preparation, scikit-learn experiments, and a Django form interface. The repository name reflects its original goal; the current code explores engagement for supplied titles and does **not** generate new titles or descriptions.
 
-> **Status: experimental, integration incomplete.** The web workflow has known blockers. No validated prediction accuracy, SEO improvement, or production deployment is claimed.
+> **Status: local metadata search workflow repaired and tested offline.** Live search requires your own YouTube API key. Historical ML experiments remain incomplete; no validated prediction accuracy, SEO improvement, or production deployment is claimed.
 
 ## What is here
 
@@ -14,7 +14,7 @@ This project brings together YouTube Data API collection, pandas data preparatio
 | Metadata preparation | CSV exports, duplicate removal, missing-value handling | Small collected snapshots; not a benchmark dataset |
 | Keyword exploration | CountVectorizer over text | Frequency analysis, not measured keyword search demand |
 | Engagement experiments | Linear regression, linear SVR, MLP regression | Experimental target: views + likes + comments |
-| Web interface | Django form, view, and HTML templates | Integration needs repair before a working demo |
+| Web interface | Validated Django form and responsive results templates | Search form and results connected; API errors handled |
 
 ## Explore the source
 
@@ -25,21 +25,22 @@ This project brings together YouTube Data API collection, pandas data preparatio
 - [Setup and known blockers](docs/DEVELOPMENT.md)
 - [Credential handling](SECURITY.md)
 
-## Workflow
+## Historical analysis workflow
 
 ```mermaid
 flowchart TD
     A["YouTube API metadata"] --> B["Clean tabular data"]
     B --> C["Keyword frequency"]
     B --> D["Engagement regression experiments"]
-    E["Django form"] -. "integration incomplete" .-> A
 ```
+
+The web app separately retrieves snippets and renders result cards; it does not run this analysis pipeline.
 
 The regression features are title length, competition, and search volume. The API collection does not supply the latter two measurements. They require a documented data source before model results can be interpreted responsibly.
 
 ## Local development
 
-Use a separate virtual environment in VS Code. Start with the [development guide](docs/DEVELOPMENT.md), which identifies the historical dependency files, environment variables, and current runtime blockers. Installing dependencies alone does not make this version runnable end to end.
+Use a separate virtual environment in VS Code. Install `requirements.txt`, set `DJANGO_SECRET_KEY`, and run `python manage.py runserver`. Set `YOUTUBE_API_KEY` to enable live search. Follow the [development guide](docs/DEVELOPMENT.md) for activation commands and offline tests. The web application does not import or execute the historical ML scripts.
 
 ## Evaluation and limitations
 
@@ -52,11 +53,11 @@ Use a separate virtual environment in VS Code. Start with the [development guide
 
 ## Next engineering milestones
 
-1. Separate collection, feature preparation, training, and inference; remove import-time side effects.
-2. Align Django routes, views, and templates, with explicit validation and API error handling.
+1. Refactor the historical ML experiments into explicit collection, feature preparation, training, and inference steps.
+2. Extend metadata search with optional statistics and an offline demonstration dataset.
 3. Define a consistent data schema and obtain real feature measurements.
 4. Compare against a simple baseline using time-aware evaluation and publish measured results.
-5. Add an offline demo, focused tests, and a reproducible environment before deployment.
+5. Add deployment configuration and end-to-end live API verification before hosting.
 
 ## Project context
 
