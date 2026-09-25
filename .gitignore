@@ -8,3 +8,10 @@ venv
 db.sqlite
 .ipynb_checkpoints
 trending_videos_metadata.csv
+
+# Local credentials and generated files
+.env.*
+!.env.example
+.venv/
+*.py[cod]
+db.sqlite3
