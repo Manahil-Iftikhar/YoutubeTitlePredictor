@@ -1,15 +1,2 @@
-<html>
-<head>
-    <title>Video Title Prediction</title>
-</head>
-<body></br></br></br>
-    <center>
-        <h1>Predict Engagement for Video Title</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Predict Engagement</button>
-        </form>
-    </center>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}<section><h2>Find related videos</h2><form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Search YouTube</button></form><p class="muted">Search requires a configured YouTube Data API key. Opening this page does not call the API.</p></section>{% endblock %}

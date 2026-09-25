@@ -2,7 +2,7 @@
 
 ## Environment preparation
 
-The historical bytecode filenames indicate Python 3.12. Use an isolated environment; dependency compatibility has not been revalidated during this documentation refresh.
+The web workflow was tested with Python 3.12, Django 5.2.17, and requests 2.34.2. Use an isolated environment.
 
 ```bash
 git clone https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor.git
@@ -22,7 +22,9 @@ Or in macOS/Linux:
 source .venv/bin/activate
 ```
 
-There are two historical dependency snapshots:
+Install the minimal web dependencies with `python -m pip install -r requirements.txt`. The web app requires only Django and requests.
+
+There are also two historical ML dependency snapshots:
 
 - `packages.txt`: the smaller snapshot, including Django, pandas, scikit-learn, Google API client, NLTK, requests, and aiohttp.
 - `reqirements.txt`: the original spelling is retained; this broader environment export includes unrelated tools and Windows-specific packages.
@@ -49,21 +51,28 @@ export DJANGO_SECRET_KEY="<new-local-secret>"
 
 `.env.example` is a reference only. No dotenv loader is configured. Never commit actual values.
 
-## Runtime blockers found in source review
+## Run the web application
 
-| Location | Issue | Required repair |
-| --- | --- | --- |
-| `analysis/urls.py` | Refers to `views.predict_engagement`, but the view is named `predict_engagement_view` | Align the route and callable |
-| `analysis/views.py` | Wildcard import triggers API requests, file writes, NLTK download, and training | Make imports side-effect free and call services explicitly |
-| `analysis/youtube_seo_tool.py` | Reads `competition` although collection does not create it | Define and validate the feature schema |
-| `analysis/views.py` and `templates/results.html` | View passes `video_data`; template expects `video_title` and `prediction` | Define a consistent result contract |
-| `extra files/seo_tool.py` | Reads `youtube_video_metadata.csv`, while collection writes other filenames | Use an explicit shared data path |
-| `extra files/seo_tool.py` | Keyword analysis expects `tags`, which trending collection does not supply; stop words supplied as a set | Normalize schema and use supported vectorizer parameters |
+```bash
+python manage.py check
+python manage.py migrate
+python manage.py runserver
+```
 
-After these issues are repaired, the intended Django workflow is `python manage.py check`, `python manage.py migrate`, then `python manage.py runserver`. These are future verification steps, not a claim that this revision passes them.
+Open http://127.0.0.1:8000/. The landing page does not call YouTube or train models. Submit a topic to retrieve up to ten video snippets. Missing keys, invalid inputs, empty results, timeouts, and provider failures are handled in the interface.
 
-## Verification of this refresh
+The interface shows retrieved titles, channels, descriptions, and video links. It does not predict engagement or generate titles. Competition and search-volume inputs were removed because the web workflow did not use them.
 
-The changed Python files were syntax-checked without importing or executing them. Documentation links and credential substitutions were checked. No API requests, training runs, or end-to-end web tests were performed.
+## Offline verification
 
-The original application behavior remains incomplete. This refresh improves documentation and credential configuration; it does not report the application as repaired.
+```bash
+python manage.py test analysis
+```
+
+Eight tests cover page loading, invalid submissions, escaped result text, empty results, error display, CSRF protection, HTTP methods, credential configuration, safe video links, request timeouts, and malformed provider responses. All network requests in service tests are mocked. GitHub Actions runs system checks and these tests.
+
+Validation: Django system checks passed and all eight tests passed locally. No real YouTube key was used, and live API behavior has not been verified.
+
+## Historical ML experiments
+
+`analysis/youtube_seo_tool.py` and `extra files/seo_tool.py` remain historical experiments and are not imported by the web application. They still require separate repair: import-time side effects, missing competition/search-volume measurements, inconsistent CSV paths, and mismatched tags/stop-word handling. See the README for evaluation limitations. Do not run these scripts as part of the web setup.

@@ -1,0 +1,3 @@
+# Minimal web application dependencies; ML experiment snapshots are separate.
+Django>=5.2,<5.3
+requests>=2.32,<3
