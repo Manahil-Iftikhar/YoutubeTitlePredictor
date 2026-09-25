@@ -1,3 +1,4 @@
+import os
 from googleapiclient.discovery import build
 import pandas as pd
 import requests
@@ -14,7 +15,7 @@ import asyncio
 import aiohttp
 
 # API configuration
-API_KEY = 'AIzaSyA-3wl7lBbC3K3TDXjCm9s6Odm9In1Ei_w'
+API_KEY = os.environ['YOUTUBE_API_KEY']
 BASE_URL = "https://www.googleapis.com/youtube/v3/videos"
 
 youtube = build('youtube', 'v3', developerKey=API_KEY)

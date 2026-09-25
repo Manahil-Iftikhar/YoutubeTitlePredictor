@@ -1,3 +1,4 @@
+import os
 from googleapiclient.discovery import build
 import pandas as pd
 import requests
@@ -11,7 +12,7 @@ from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score
 # Your API key here
-API_KEY = 'AIzaSyA-3wl7lBbC3K3TDXjCm9s6Odm9In1Ei_w'
+API_KEY = os.environ['YOUTUBE_API_KEY']
 BASE_URL = "https://www.googleapis.com/youtube/v3/videos"
 
 # Build a resource object for interacting with the YouTube API
