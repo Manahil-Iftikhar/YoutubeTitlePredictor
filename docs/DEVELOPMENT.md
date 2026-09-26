@@ -76,3 +76,11 @@ Validation: Django system checks passed and all eight tests passed locally. No r
 ## Historical ML experiments
 
 `analysis/youtube_seo_tool.py` and `extra files/seo_tool.py` remain historical experiments and are not imported by the web application. They still require separate repair: import-time side effects, missing competition/search-volume measurements, inconsistent CSV paths, and mismatched tags/stop-word handling. See the README for evaluation limitations. Do not run these scripts as part of the web setup.
+
+## Keyless offline demo
+
+Start Django as described above with a local `DJANGO_SECRET_KEY`; `YOUTUBE_API_KEY` may be unset. Open http://127.0.0.1:8000/demo/ or use the landing-page demo link.
+
+The three records in `analysis/demo.py` are fictional and have no outbound video URLs. The demo is explicitly labelled and never substitutes for a failed live search. It makes no API calls. Internet access may still be needed for initial dependency installation.
+
+Three additional tests verify deterministic keyless rendering, the landing-page link, and rejected demo POST requests. The complete suite now contains 11 tests.

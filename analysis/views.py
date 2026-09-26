@@ -16,3 +16,13 @@ def predict_engagement_view(request):
         else:
             return render(request, "results.html", {"query": query, "videos": videos})
     return render(request, "predict.html", {"form": form})
+
+
+@require_http_methods(["GET"])
+def demo_view(request):
+    from .demo import DEMO_VIDEOS
+    return render(request, "results.html", {
+        "query": "Offline sample collection",
+        "videos": DEMO_VIDEOS,
+        "is_demo": True,
+    })

@@ -74,3 +74,25 @@ class ServiceTests(SimpleTestCase):
             get.return_value.json.return_value = payload
             with self.assertRaises(VideoSearchError):
                 search_videos("Python")
+
+
+class DemoTests(SimpleTestCase):
+    @patch.dict(os.environ, {}, clear=True)
+    @patch("analysis.services.requests.get", side_effect=AssertionError("No network allowed"))
+    def test_demo_is_keyless_explicit_and_deterministic(self, get):
+        first = self.client.get("/demo/")
+        second = self.client.get("/demo/")
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(first.content, second.content)
+        self.assertContains(first, "fictional sample data")
+        self.assertContains(first, "<article>", count=3)
+        self.assertNotContains(first, "youtube.com/watch")
+        get.assert_not_called()
+
+    def test_landing_page_links_to_demo(self):
+        self.assertContains(self.client.get("/"), 'href="/demo/"')
+
+    @patch("analysis.services.requests.get")
+    def test_demo_rejects_post_without_network(self, get):
+        self.assertEqual(self.client.post("/demo/", {}).status_code, 405)
+        get.assert_not_called()

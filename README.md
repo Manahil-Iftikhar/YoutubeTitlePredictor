@@ -42,6 +42,12 @@ The regression features are title length, competition, and search volume. The AP
 
 Use a separate virtual environment in VS Code. Install `requirements.txt`, set `DJANGO_SECRET_KEY`, and run `python manage.py runserver`. Set `YOUTUBE_API_KEY` to enable live search. Follow the [development guide](docs/DEVELOPMENT.md) for activation commands and offline tests. The web application does not import or execute the historical ML scripts.
 
+## Try the offline demo
+
+After local setup, open **http://127.0.0.1:8000/demo/** or choose **Open offline demo** on the landing page. It displays three clearly labelled, fictional sample records with no API key, external links, or API requests. It demonstrates the results interface; it does not simulate live YouTube search or a trained model.
+
+The application still requires a local `DJANGO_SECRET_KEY` to start. Live search remains a separate workflow requiring `YOUTUBE_API_KEY`.
+
 ## Evaluation and limitations
 
 - No saved trained model or reproducible evaluation report is included.
@@ -54,7 +60,7 @@ Use a separate virtual environment in VS Code. Install `requirements.txt`, set `
 ## Next engineering milestones
 
 1. Refactor the historical ML experiments into explicit collection, feature preparation, training, and inference steps.
-2. Extend metadata search with optional statistics and an offline demonstration dataset.
+2. Extend live metadata search with optional statistics.
 3. Define a consistent data schema and obtain real feature measurements.
 4. Compare against a simple baseline using time-aware evaluation and publish measured results.
 5. Add deployment configuration and end-to-end live API verification before hosting.
