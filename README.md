@@ -48,9 +48,13 @@ After local setup, open **http://127.0.0.1:8000/demo/** or choose **Open offline
 
 The application still requires a local `DJANGO_SECRET_KEY` to start. Live search remains a separate workflow requiring `YOUTUBE_API_KEY`.
 
+## Reproducible offline ML experiment
+
+The [maintained baseline experiment](experiments/README.md) uses the existing 34-row snapshot, a publication-date holdout, train-only preprocessing, and a median baseline. The ridge model underperformed the baseline; measured results and limitations are published with reproducible commands. This is descriptive snapshot analysis, not validated forecasting.
+
 ## Evaluation and limitations
 
-- No saved trained model or reproducible evaluation report is included.
+- No deployed prediction model is included. The maintained offline experiment publishes a reproducible evaluation report showing poor predictive performance.
 - Likes and comments contribute to the engagement target; it is not a future-view forecast or a ranking guarantee.
 - Placeholder search-volume values and unavailable competition data do not establish SEO performance.
 - A random train/test split on a small trending-video sample does not demonstrate generalization across channels or time.
@@ -59,7 +63,7 @@ The application still requires a local `DJANGO_SECRET_KEY` to start. Live search
 
 ## Next engineering milestones
 
-1. Refactor the historical ML experiments into explicit collection, feature preparation, training, and inference steps.
+1. Extend the maintained offline baseline only after obtaining a larger dataset with documented observation times and video IDs.
 2. Extend live metadata search with optional statistics.
 3. Define a consistent data schema and obtain real feature measurements.
 4. Compare against a simple baseline using time-aware evaluation and publish measured results.

@@ -1,0 +1,39 @@
+{
+  "source_file": "youtube_video_metadata_cleaned.csv",
+  "source_sha256": "cf4472ba35be35866efa42a33e31100323c913ca4e90bda8584ac5654020333d",
+  "raw_rows": 34,
+  "clean_rows": 34,
+  "train_rows": 22,
+  "test_rows": 12,
+  "train_latest_publication": "2024-10-15 22:45:01+00:00",
+  "test_earliest_publication": "2024-10-16 15:00:16+00:00",
+  "features": [
+    "title_length",
+    "category"
+  ],
+  "target": "snapshot views + likes + comments",
+  "split": "earliest 80% of distinct publication dates for training; remaining dates held out",
+  "versions": {
+    "pandas": "2.2.3",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  },
+  "metrics": {
+    "median_baseline": {
+      "mae": 1554635.3333333333,
+      "rmse": 1683005.4914201607,
+      "r2": -2.9406999565158176
+    },
+    "ridge_log_target": {
+      "mae": 2060246.6783701323,
+      "rmse": 2205204.141601285,
+      "r2": -5.76550005592502
+    }
+  },
+  "limitations": [
+    "Only a small trending-video snapshot; collection time and video IDs absent",
+    "Publication order is not observation time; this is not future engagement forecasting",
+    "Popularity is confounded by exposure age, channel, category and selection bias",
+    "No title generation, SEO uplift, causal effect, or deployment-quality claim"
+  ]
+}
