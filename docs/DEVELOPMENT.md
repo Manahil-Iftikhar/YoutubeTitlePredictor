@@ -69,9 +69,9 @@ The interface shows retrieved titles, channels, descriptions, and video links. I
 python manage.py test analysis
 ```
 
-Eight tests cover page loading, invalid submissions, escaped result text, empty results, error display, CSRF protection, HTTP methods, credential configuration, safe video links, request timeouts, and malformed provider responses. All network requests in service tests are mocked. GitHub Actions runs system checks and these tests.
+The complete suite contains 11 tests. The original eight cover page loading, invalid submissions, escaped result text, empty results, error display, CSRF protection, HTTP methods, credential configuration, safe video links, request timeouts, and malformed provider responses. Three additional tests cover keyless demo rendering, its landing-page link, and rejected demo POST requests. All network requests in service tests are mocked. GitHub Actions runs system checks and this complete suite.
 
-Validation: Django system checks passed and all eight tests passed locally. No real YouTube key was used, and live API behavior has not been verified.
+Hosted verification: [web run 36263670472](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/runs/36263670472) passed Django system checks and the complete test suite on September 26, 2026, at commit `2a704b2800a76bbe85aae58b98fda05a2bb89c23`. No real YouTube key is configured in that workflow, and live API behavior has not been verified.
 
 ## Historical ML experiments
 

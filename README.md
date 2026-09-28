@@ -1,5 +1,8 @@
 # YouTube Title & Engagement Explorer
 
+[![Web checks](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/workflows/web-checks.yml/badge.svg?branch=main)](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/workflows/web-checks.yml)
+[![Offline ML checks](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/workflows/ml-checks.yml/badge.svg?branch=main)](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/workflows/ml-checks.yml)
+
 **A Python and Django prototype for exploring YouTube metadata, keyword frequency, and engagement regression.**
 
 This project brings together YouTube Data API collection, pandas data preparation, scikit-learn experiments, and a Django form interface. The repository name reflects its original goal; the current code explores engagement for supplied titles and does **not** generate new titles or descriptions.
@@ -51,6 +54,18 @@ The application still requires a local `DJANGO_SECRET_KEY` to start. Live search
 ## Reproducible offline ML experiment
 
 The [maintained baseline experiment](experiments/README.md) uses the existing 34-row snapshot, a publication-date holdout, train-only preprocessing, and a median baseline. The ridge model underperformed the baseline; measured results and limitations are published with reproducible commands. This is descriptive snapshot analysis, not validated forecasting.
+
+## Verification at a glance
+
+Both workflows passed on **September 26, 2026**, at commit `2a704b2800a76bbe85aae58b98fda05a2bb89c23`.
+
+| Workflow | Verified scope | Evidence |
+| --- | --- | --- |
+| Web application | Django system checks and the offline web suite, including the keyless demo; provider responses are mocked | [Passing web run](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/runs/36263670472) |
+| Offline ML experiment | Data-preparation/reproducibility tests and execution of the existing-data baseline; results exported as CI artifacts | [Passing ML run](https://github.com/Manahil-Iftikhar/YoutubeTitlePredictor/actions/runs/36263670464) |
+| Live API and deployment | Real YouTube credentials, provider behavior, and production hosting | Not verified by these offline checks |
+
+See [web setup and test commands](docs/DEVELOPMENT.md#offline-verification) and [ML reproduction instructions](experiments/README.md). CI-generated ML results are retained for 14 days; the [committed experiment report](reports/engagement/metrics.json) remains available separately. Passing checks establish the tested behavior, not prediction quality or SEO gains.
 
 ## Evaluation and limitations
 
